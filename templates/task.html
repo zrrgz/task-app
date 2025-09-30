@@ -1,41 +1,68 @@
-{% extends "base.html" %}
-{% block body %}
-{% set id=task[0] %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_name }} - {{ task['title'] }}</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f0f2f5; }
+h1, h2 { text-align: center; color: #333; }
+.header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.logs { max-width: 600px; margin: auto; background: #fff; padding: 15px; border-radius: 6px; }
+.log { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd; padding: 5px 0; }
+button { padding: 4px 8px; border-radius: 4px; border: none; background: #dc3545; color: white; cursor: pointer; }
+button:hover { background: #c82333; }
+form.inline { display: inline; }
+</style>
+</head>
+<body>
+<h1>{{ app_name }}</h1>
+
 <div class="header">
-  <div class="left">{{ task[2] }}</div>
-  <div class="title">{{ task[1] }}</div>
-  <div class="right">{{ task[3] }}</div>
+  <div>Created: {{ task['created_at'] }}</div>
+  <div>{{ task['title'] }}</div>
+  <div>Submit by: {{ task['submit_at'] }}</div>
 </div>
-<div class="container">
-  <h3>Logs</h3>
-  {% for l in logs %}
-    <div class="log">{{ l[0] }}  —  {{ l[1] }}</div>
-  {% else %}
-    <div>No logs yet</div>
-  {% endfor %}
-  <h4>Add log</h4>
-  <form method="post" action="{{ url_for('add_log_route',tid=id) }}">
-    <div class="form-row"><input name="text" placeholder="e.g., Read 2 pages" required></div>
-    <div class="form-row">
-      <select name="status">
-        <option value="">Leave status</option>
-        <option value="not started">Not started</option>
-        <option value="in progress">In progress</option>
-        <option value="completed">Completed</option>
-      </select>
-      <button class="btn" type="submit">Add log (server time recorded)</button>
-    </div>
+
+<div style="text-align:center; margin-bottom:10px;">
+  <form action="{{ url_for('set_status', tid=task['id']) }}" method="POST" style="display:inline;">
+    <select name="status">
+      <option value="not started" {% if task['status']=='not started' %}selected{% endif %}>Not Started</option>
+      <option value="in progress" {% if task['status']=='in progress' %}selected{% endif %}>In Progress</option>
+      <option value="completed" {% if task['status']=='completed' %}selected{% endif %}>Completed</option>
+    </select>
+    <button type="submit">Update Status</button>
   </form>
-  <div class="footer">
-    <strong>Status:</strong> {{ task[4] }}
-    <form method="post" action="{{ url_for('set_status',tid=id) }}" style="display:inline-block;margin-left:10px">
-      <select name="status">
-        <option value="not started">Not started</option>
-        <option value="in progress">In progress</option>
-        <option value="completed">Completed</option>
-      </select>
-      <button class="btn" type="submit">Set</button>
-    </form>
-  </div>
+
+  <form action="{{ url_for('update_submit_route', tid=task['id']) }}" method="POST" style="display:inline;">
+    <input type="datetime-local" name="submit_at" required>
+    <button type="submit">Update Submit Date</button>
+  </form>
+
+  <form action="{{ url_for('delete_task_route', tid=task['id']) }}" method="POST" style="display:inline;">
+    <button type="submit">Delete Task</button>
+  </form>
 </div>
-{% endblock %}
+
+<div class="logs">
+  <h2>Logs</h2>
+  {% for log in logs %}
+    <div class="log">
+      <div>{{ log['timestamp'] }} — {{ log['log'] }}</div>
+      <form class="inline" action="{{ url_for('delete_log_route', log_id=log['id']) }}" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  {% else %}
+    <p>No logs yet.</p>
+  {% endfor %}
+</div>
+
+<div style="max-width:600px; margin:auto; text-align:center; margin-top:15px;">
+  <form action="{{ url_for('add_log_route', tid=task['id']) }}" method="POST">
+    <input type="text" name="text" placeholder="Add log..." required>
+    <button type="submit">Add Log</button>
+  </form>
+</div>
+
+</body>
+</html>
