@@ -11,6 +11,7 @@ TZ=pytz.timezone('Asia/Kolkata')
 MORNING_HOUR=8
 EVENING_HOUR=20
 
+"""
 def init_db():
     c=conn().cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS tasks(
@@ -27,6 +28,32 @@ def init_db():
         text TEXT
     )''')
     conn().commit()
+"""
+def init_db():
+    if not os.path.exists(DB_PATH):
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        # Create tables
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS tasks(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            created_at TEXT,
+            submit_at TEXT,
+            status TEXT
+        )
+        """)
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS logs(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task_id INTEGER,
+            log TEXT,
+            timestamp TEXT,
+            FOREIGN KEY(task_id) REFERENCES tasks(id)
+        )
+        """)
+        conn.commit()
+        conn.close()
 
 def conn():
     return sqlite3.connect(DB,check_same_thread=False)
