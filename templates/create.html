@@ -1,9 +1,24 @@
-{% extends "base.html" %}
-{% block body %}
-<h2>Create Task</h2>
-<form method="post">
-<div class="form-row"><input name="title" placeholder="Task title" required></div>
-<div class="form-row"><input name="submit_at" placeholder="Submission date (YYYY-MM-DD)"></div>
-<div class="form-row"><button class="btn" type="submit">Create</button></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_name }} - Create Task</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f0f2f5; }
+h1 { text-align: center; color: #333; }
+form { max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 10px; background: #fff; padding: 15px; border-radius: 6px; }
+input, button { padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+button { background: #007bff; color: white; border: none; cursor: pointer; }
+button:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+<h1>{{ app_name }} - Create Task</h1>
+<form method="POST">
+  <input type="text" name="title" placeholder="Task title" required>
+  <label>Submission date:</label>
+  <input type="datetime-local" name="submit_at">
+  <button type="submit">Create Task</button>
 </form>
-{% endblock %}
+</body>
+</html>
