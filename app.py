@@ -2,6 +2,9 @@ from flask import Flask,render_template,request,redirect,url_for
 import sqlite3,os,datetime,smtplib,pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from email.message import EmailMessage
+from flask import send_file
+
+
 
 DB='tasks.db'
 TZ=pytz.timezone('Asia/Kolkata')
@@ -157,6 +160,10 @@ def set_status(tid):
     if status: update_status(tid,status)
     return redirect(url_for('task_page',tid=tid))
 
+@app.route("/download_db")
+def download_db():
+    return send_file("tasks.db", as_attachment=True)
+	
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 
