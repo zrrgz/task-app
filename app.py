@@ -4,11 +4,7 @@ import sqlite3, os, datetime, pytz
 
 DB = 'tasks.db'
 TZ = pytz.timezone('Asia/Kolkata')
-<<<<<<< HEAD
-APP_NAME = "AURA"
-=======
 APP_NAME = "EON Alpha v1.0.0"
->>>>>>> 1e6f132
 MORNING_HOUR = 8
 EVENING_HOUR = 20
 
