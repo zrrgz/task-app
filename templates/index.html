@@ -1,14 +1,39 @@
-{% extends "base.html" %}
-{% block body %}
-<h2>Tasks</h2>
-<div><a class="btn" href="{{ url_for('create') }}">Create task</a></div>
-<ul>
-{% for t in tasks %}
-<li><a href="{{ url_for('task_page',tid=t[0]) }}">#{{ t[0] }} {{ t[1] }}</a> — {{ t[4] }}</li>
-{% else %}
-<li>No tasks</li>
-{% endfor %}
-</ul>
-<a href="/download_db" class="btn">Download Database</a>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ app_name }}</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background: #f0f2f5; }
+h1 { text-align: center; color: #333; }
+.task-list { max-width: 600px; margin: 20px auto; }
+.task { background: #fff; padding: 10px 15px; margin: 10px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+.task.completed { text-decoration: line-through; color: #888; }
+a.button { text-decoration: none; padding: 5px 10px; background: #007bff; color: white; border-radius: 4px; }
+a.button:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+<h1>{{ app_name }}</h1>
 
+<div class="task-list">
+  <a href="{{ url_for('create') }}" class="button">Create New Task</a>
+  <a href="{{ url_for('download_db') }}" class="button">Download Database</a>
+
+  {% for task in tasks %}
+    <div class="task {% if task['status']=='completed' %}completed{% endif %}">
+      <div>
+        <a href="{{ url_for('task_page', tid=task['id']) }}">{{ task['title'] }}</a> —
+        Status: {{ task['status'] }}
+      </div>
+      <form action="{{ url_for('delete_task_route', tid=task['id']) }}" method="POST" style="margin:0;">
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  {% else %}
+    <p>No tasks yet.</p>
+  {% endfor %}
+</div>
+
+</body>
+</html>
