@@ -144,28 +144,12 @@ def evening_job():
 # ----------------- Flask -----------------
 app = Flask(__name__)
 init_db()
-<<<<<<< HEAD
 """
-=======
-<<<<<<< HEAD
-
-=======
-"""
->>>>>>> 9692eb3 (Final ig)
->>>>>>> 1e6f132
 sched = BackgroundScheduler(timezone=TZ)
 sched.add_job(morning_job,'cron',hour=MORNING_HOUR,minute=0)
 sched.add_job(evening_job,'cron',hour=EVENING_HOUR,minute=0)
 sched.start()
-<<<<<<< HEAD
 """
-=======
-<<<<<<< HEAD
-
-=======
-"""
->>>>>>> 9692eb3 (Final ig)
->>>>>>> 1e6f132
 # ----------------- Routes -----------------
 @app.route('/')
 def index():
