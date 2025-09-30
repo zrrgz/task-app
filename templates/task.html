@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+{% set id=task[0] %}
+<div class="header">
+  <div class="left">{{ task[2] }}</div>
+  <div class="title">{{ task[1] }}</div>
+  <div class="right">{{ task[3] }}</div>
+</div>
+<div class="container">
+  <h3>Logs</h3>
+  {% for l in logs %}
+    <div class="log">{{ l[0] }}  —  {{ l[1] }}</div>
+  {% else %}
+    <div>No logs yet</div>
+  {% endfor %}
+  <h4>Add log</h4>
+  <form method="post" action="{{ url_for('add_log_route',tid=id) }}">
+    <div class="form-row"><input name="text" placeholder="e.g., Read 2 pages" required></div>
+    <div class="form-row">
+      <select name="status">
+        <option value="">Leave status</option>
+        <option value="not started">Not started</option>
+        <option value="in progress">In progress</option>
+        <option value="completed">Completed</option>
+      </select>
+      <button class="btn" type="submit">Add log (server time recorded)</button>
+    </div>
+  </form>
+  <div class="footer">
+    <strong>Status:</strong> {{ task[4] }}
+    <form method="post" action="{{ url_for('set_status',tid=id) }}" style="display:inline-block;margin-left:10px">
+      <select name="status">
+        <option value="not started">Not started</option>
+        <option value="in progress">In progress</option>
+        <option value="completed">Completed</option>
+      </select>
+      <button class="btn" type="submit">Set</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
