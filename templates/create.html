@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <title>{{ app_name }} - Create Task</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background: #f0f2f5; }
-h1 { text-align: center; color: #333; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 20px; }
+header { text-align: center; margin-bottom: 20px; }
+h1 { color: #333; }
 form { max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 10px; background: #fff; padding: 15px; border-radius: 6px; }
 input, button { padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
 button { background: #007bff; color: white; border: none; cursor: pointer; }
@@ -13,7 +14,12 @@ button:hover { background: #0056b3; }
 </style>
 </head>
 <body>
-<h1>{{ app_name }} - Create Task</h1>
+<a href="{{ url_for('index') }}" style="margin-bottom: 10px; display:inline-block;">← Back</a>
+
+<header>
+  <h1>{{ app_name }} - Create Task</h1>
+  <a href="{{ url_for('index') }}"><button>Back to Home</button></a>
+</header>
 <form method="POST">
   <input type="text" name="title" placeholder="Task title" required>
   <label>Submission date:</label>

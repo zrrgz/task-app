@@ -4,7 +4,11 @@ import sqlite3, os, datetime, pytz
 
 DB = 'tasks.db'
 TZ = pytz.timezone('Asia/Kolkata')
+<<<<<<< HEAD
 APP_NAME = "AURA"
+=======
+APP_NAME = "EON Alpha v1.0.0"
+>>>>>>> 1e6f132
 MORNING_HOUR = 8
 EVENING_HOUR = 20
 
@@ -144,12 +148,28 @@ def evening_job():
 # ----------------- Flask -----------------
 app = Flask(__name__)
 init_db()
+<<<<<<< HEAD
 """
+=======
+<<<<<<< HEAD
+
+=======
+"""
+>>>>>>> 9692eb3 (Final ig)
+>>>>>>> 1e6f132
 sched = BackgroundScheduler(timezone=TZ)
 sched.add_job(morning_job,'cron',hour=MORNING_HOUR,minute=0)
 sched.add_job(evening_job,'cron',hour=EVENING_HOUR,minute=0)
 sched.start()
+<<<<<<< HEAD
 """
+=======
+<<<<<<< HEAD
+
+=======
+"""
+>>>>>>> 9692eb3 (Final ig)
+>>>>>>> 1e6f132
 # ----------------- Routes -----------------
 @app.route('/')
 def index():
