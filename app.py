@@ -30,8 +30,8 @@ def init_db():
     conn().commit()
 """
 def init_db():
-    if not os.path.exists(DB_PATH):
-        conn = sqlite3.connect(DB_PATH)
+    if not os.path.exists(DB):
+        conn = sqlite3.connect(DB)
         c = conn.cursor()
         # Create tables
         c.execute("""
