@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>{{ app_name }} - New Drop</title></head>
+<body>
+<h1>{{ app_name }} - New Drop</h1>
+<a href="{{ url_for('drops_index') }}">← Back</a>
+<form method="post">
+  <label>Title:</label><br>
+  <input type="text" name="title"><br><br>
+  <label>Code / Content:</label><br>
+  <textarea name="content" rows="10" cols="50"></textarea><br><br>
+  <button type="submit">Save</button>
+</form>
+</body>
+</html>

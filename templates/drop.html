@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head><title>{{ app_name }} - {{ drop['title'] }}</title></head>
+<body>
+<h1>{{ drop['title'] }}</h1>
+<p><b>Created:</b> {{ drop['created_at'] }}</p>
+<pre>{{ drop['content'] }}</pre>
+<a href="{{ url_for('drops_index') }}">← Back to Drops</a>
+</body>
+</html>

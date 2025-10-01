@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>{{ app_name }} - Drops</title></head>
+<body>
+<h1>{{ app_name }} - Drops</h1>
+<a href="{{ url_for('index') }}">← Back</a> | 
+<a href="{{ url_for('create_drop') }}">+ New Drop</a>
+<ul>
+{% for d in drops %}
+  <li>
+    <a href="{{ url_for('drop_page', did=d['id']) }}">{{ d['title'] }}</a>
+    ({{ d['created_at'] }})
+    <form action="{{ url_for('delete_drop_route', did=d['id']) }}" method="post" style="display:inline;">
+      <button type="submit">Delete</button>
+    </form>
+  </li>
+{% endfor %}
+</ul>
+</body>
+</html>

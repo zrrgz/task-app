@@ -4,7 +4,7 @@ import sqlite3, os, datetime, pytz
 
 DB = 'tasks.db'
 TZ = pytz.timezone('Asia/Kolkata')
-APP_NAME = "EON Alpha v1.0.0"
+APP_NAME = "EON Alpha v2.0.0"
 MORNING_HOUR = 8
 EVENING_HOUR = 20
 
@@ -40,7 +40,16 @@ def init_db():
                 FOREIGN KEY(task_id) REFERENCES tasks(id)
             )
             """)
+            cur.execute("""
+            CREATE TABLE IF NOT EXISTS drops(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                content TEXT,
+                created_at TEXT
+            )
+            """)
             c.commit()
+
 
 def nowstr():
     return datetime.datetime.now(TZ).strftime('%Y-%m-%d %H:%M:%S')
@@ -97,6 +106,29 @@ def delete_task(tid):
 def delete_log(log_id):
     with conn() as c:
         c.execute("DELETE FROM logs WHERE id=?", (log_id,))
+
+# --------------- Drops Functions ----------------
+def add_drop(title, content):
+    with conn() as c:
+        c.execute("INSERT INTO drops(title, content, created_at) VALUES(?,?,?)",
+                  (title, content, nowstr()))
+
+def get_drops():
+    with conn() as c:
+        cur = c.cursor()
+        cur.execute("SELECT * FROM drops ORDER BY id DESC")
+        return cur.fetchall()
+
+def get_drop(did):
+    with conn() as c:
+        cur = c.cursor()
+        cur.execute("SELECT * FROM drops WHERE id=?", (did,))
+        return cur.fetchone()
+
+def delete_drop(did):
+    with conn() as c:
+        c.execute("DELETE FROM drops WHERE id=?", (did,))
+
 """
 # ----------------- Email (optional) -----------------
 def send_email(subject, body, to_addrs):
@@ -144,12 +176,14 @@ def evening_job():
 # ----------------- Flask -----------------
 app = Flask(__name__)
 init_db()
+
 """
 sched = BackgroundScheduler(timezone=TZ)
 sched.add_job(morning_job,'cron',hour=MORNING_HOUR,minute=0)
 sched.add_job(evening_job,'cron',hour=EVENING_HOUR,minute=0)
 sched.start()
 """
+
 # ----------------- Routes -----------------
 @app.route('/')
 def index():
@@ -208,6 +242,33 @@ def delete_log_route(log_id):
 @app.route("/download_db")
 def download_db():
     return send_file(DB, as_attachment=True)
+
+@app.route('/drops')
+def drops_index():
+    drops = get_drops()
+    return render_template('drops_index.html', drops=drops, app_name=APP_NAME)
+
+@app.route('/drops/create', methods=['GET','POST'])
+def create_drop():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        if title and content:
+            add_drop(title, content)
+        return redirect(url_for('drops_index'))
+    return render_template('create_drop.html', app_name=APP_NAME)
+
+@app.route('/drops/<int:did>')
+def drop_page(did):
+    d = get_drop(did)
+    if not d: return "Not found", 404
+    return render_template('drop.html', drop=d, app_name=APP_NAME)
+
+@app.route('/drops/<int:did>/delete', methods=['POST'])
+def delete_drop_route(did):
+    delete_drop(did)
+    return redirect(url_for('drops_index'))
+
 
 # ----------------- Run -----------------
 if __name__ == "__main__":
