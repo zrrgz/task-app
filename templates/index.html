@@ -35,5 +35,9 @@ a:hover { text-decoration: underline; }
   <p>No tasks yet.</p>
 {% endfor %}
 </div>
+<a href="{{ url_for('drops_index') }}">
+  <button style="position:fixed; bottom:10px; left:10px;">Drops</button>
+</a>
+
 </body>
 </html>
